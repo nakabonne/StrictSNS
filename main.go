@@ -1,18 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
 
-	"./models"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	db := models.GetMysql()
-	posts := models.AllPosts(db)
-	defer db.Close()
-	defer posts.Close()
-	fmt.Println(posts)
+	http.HandleFunc("/", userIndex)
+	http.ListenAndServe(":8080", nil)
 	/* 使い方
 	for users.Next() {
 		var id int

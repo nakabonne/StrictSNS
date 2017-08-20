@@ -6,8 +6,8 @@ import (
 )
 
 type User struct {
-	id   int
-	name string
+	Id   int
+	Name string
 }
 
 func AllUsers(db *sql.DB) *sql.Rows {

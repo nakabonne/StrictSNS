@@ -9,8 +9,8 @@ type Post struct {
 	Id   int
 	User_id string
   Content string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	//CreatedAt time.Time
+	//UpdatedAt time.Time
 }
 
 func AllPosts(db *sql.DB) *sql.Rows {
