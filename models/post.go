@@ -5,12 +5,15 @@ import (
 	"log"
 )
 
-type User struct {
-	id   int
-	name string
+type Post struct {
+	Id   int
+	User_id string
+  Content string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
-func AllUsers(db *sql.DB) *sql.Rows {
+func AllPosts(db *sql.DB) *sql.Rows {
 	rows, err := db.Query("SELECT * FROM `users`")
 	if err != nil {
 		log.Fatal("エラー：", err)

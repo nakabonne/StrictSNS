@@ -9,10 +9,10 @@ import (
 
 func main() {
 	db := models.GetMysql()
-	users := models.AllUser(db)
+	posts := models.AllPosts(db)
 	defer db.Close()
-	defer users.Close()
-	fmt.Println(users)
+	defer posts.Close()
+	fmt.Println(posts)
 	/* 使い方
 	for users.Next() {
 		var id int
