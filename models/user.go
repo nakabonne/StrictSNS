@@ -18,3 +18,14 @@ func AllUsers(db *sql.DB) *sql.Rows {
 	}
 	return rows
 }
+
+/* 使い方
+for users.Next() {
+	var id int
+	var name string
+	if err := users.Scan(&id, &name); err != nil {
+		log.Fatal("エラー: ", err)
+	}
+	fmt.Println(id, name)
+}
+*/

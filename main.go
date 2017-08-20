@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -8,15 +9,10 @@ import (
 
 func main() {
 	http.HandleFunc("/", userIndex)
-	http.ListenAndServe(":8080", nil)
-	/* 使い方
-	for users.Next() {
-		var id int
-		var name string
-		if err := users.Scan(&id, &name); err != nil {
-			log.Fatal("エラー: ", err)
-		}
-		fmt.Println(id, name)
+	http.HandleFunc("/post/new", userNew)
+	http.HandleFunc("/post/create", userCreate)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal("ListenAndServe: ", Log(http.DefaultServeMux))
 	}
-	*/
 }
