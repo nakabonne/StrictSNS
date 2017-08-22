@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"./models"
@@ -13,8 +14,8 @@ import (
 var db = models.GetMysql()
 
 func userNew(w http.ResponseWriter, r *http.Request) {
-	temp := template.Must(template.ParseFiles("views/posts/new.html"))
-	if err := temp.ExecuteTemplate(w, "new.html", nil); err != nil {
+	temp := template.Must(template.ParseFiles("views/posts/new.tmpl"))
+	if err := temp.ExecuteTemplate(w, "new.tmpl", nil); err != nil {
 		log.Fatal("[golang server] internal server error")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -53,8 +54,23 @@ func userIndex(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("テンプレートエラー", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	fmt.Println("インデックス")
 	//posts := models.AllPosts(db)
 	//defer db.Close()
 	//defer posts.Close()
+}
+
+func userDetail(w http.ResponseWriter, r *http.Request) {
+	segs := strings.Split(r.URL.Path, "/")
+	fmt.Println("idは", segs[3])
+	id, _ := strconv.ParseUint(segs[3], 10, 64)
+	//for _, v := range segs {
+	//	fmt.Println(v)
+	//}
+	post := models.PostByID(db, id)
+	tmpl := template.Must(template.ParseFiles("views/posts/detail.tmpl"))
+	err := tmpl.Execute(w, post)
+	if err != nil {
+		log.Fatal("テンプレートエラー", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

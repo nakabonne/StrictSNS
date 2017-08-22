@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"log"
+	"strconv"
 )
 
 // Post 投稿
@@ -12,6 +13,14 @@ type Post struct {
 	Content   string
 	CreatedAt []uint8
 	UpdatedAt []uint8
+}
+
+// Insert インサートする
+func (p *Post) Insert(db *sql.DB) {
+	query := "INSERT INTO posts (user_id, content) values(?, ?)"
+	if _, err := db.Exec(query, p.UserID, p.Content); err != nil {
+		log.Fatal("インサートエラー：", err)
+	}
 }
 
 // AllPosts 全件取得
@@ -35,15 +44,33 @@ func AllPosts(db *sql.DB) []*Post {
 		if err := rows.Scan(&id, &userID, &content, &createdAt, &updatedAt); err != nil {
 			log.Fatal("スキャンエラー: ", err)
 		}
-		posts = append(posts, &Post{ID: id, UserID: userID, Content: content})
+		posts = append(posts, &Post{ID: id, UserID: userID, Content: content, CreatedAt: createdAt, UpdatedAt: updatedAt})
 	}
 	return posts
 }
 
-// Insert インサートする
-func (p *Post) Insert(db *sql.DB) {
-	query := "INSERT INTO posts (user_id, content) values(?, ?)"
-	if _, err := db.Exec(query, p.UserID, p.Content); err != nil {
-		log.Fatal("インサートエラー：", err)
+func PostByID(db *sql.DB, id uint64) *Post {
+	idS := strconv.FormatUint(id, 10)
+	query := "SELECT * FROM `posts` WHERE `id` = " + idS
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Fatal("クエリーエラー：", err)
 	}
+
+	var post *Post
+
+	for rows.Next() {
+		var (
+			id        int
+			userID    int
+			content   string
+			createdAt []uint8
+			updatedAt []uint8
+		)
+		if err := rows.Scan(&id, &userID, &content, &createdAt, &updatedAt); err != nil {
+			log.Fatal("スキャンエラー: ", err)
+		}
+		post = &Post{ID: id, UserID: userID, Content: content, CreatedAt: createdAt, UpdatedAt: updatedAt}
+	}
+	return post
 }
