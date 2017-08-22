@@ -11,9 +11,7 @@ import (
 	"./models"
 )
 
-var db = models.GetMysql()
-
-func userNew(w http.ResponseWriter, r *http.Request) {
+func postNew(w http.ResponseWriter, r *http.Request) {
 	temp := template.Must(template.ParseFiles("views/posts/new.tmpl"))
 	if err := temp.ExecuteTemplate(w, "new.tmpl", nil); err != nil {
 		log.Fatal("[golang server] internal server error")
@@ -21,7 +19,7 @@ func userNew(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func userCreate(w http.ResponseWriter, r *http.Request) {
+func postCreate(w http.ResponseWriter, r *http.Request) {
 	// リクエストをパース
 	if err := r.ParseForm(); err != nil {
 		log.Fatal("エラー：", err)
@@ -43,7 +41,7 @@ func userCreate(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 301)
 }
 
-func userIndex(w http.ResponseWriter, r *http.Request) {
+func postIndex(w http.ResponseWriter, r *http.Request) {
 	posts := models.AllPosts(db)
 	temp := template.Must(template.ParseFiles("views/posts/index.tmpl"))
 	err := temp.Execute(w, posts)
@@ -53,7 +51,7 @@ func userIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func userDetail(w http.ResponseWriter, r *http.Request) {
+func postDetail(w http.ResponseWriter, r *http.Request) {
 	segs := strings.Split(r.URL.Path, "/")
 	id, _ := strconv.ParseUint(segs[3], 10, 64)
 	post := models.PostByID(db, id)

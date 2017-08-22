@@ -19,13 +19,27 @@ func AllUsers(db *sql.DB) *sql.Rows {
 	return rows
 }
 
-/* 使い方
-for users.Next() {
-	var id int
-	var name string
-	if err := users.Scan(&id, &name); err != nil {
-		log.Fatal("エラー: ", err)
+// UserByName id指定で全件取得
+func UserByName(db *sql.DB, name string) *User {
+	query := "SELECT * FROM users WHERE name = '" + name + "'"
+	log.Println(query)
+	rows, err := db.Query(query)
+	if err != nil {
+		log.Fatal("クエリーエラー：", err)
 	}
-	fmt.Println(id, name)
+
+	var user *User
+
+	for rows.Next() {
+		var (
+			id   int
+			name string
+		)
+		if err := rows.Scan(&id, &name); err != nil {
+			log.Fatal("スキャンエラー: ", err)
+		}
+		user = &User{ID: id, Name: name}
+	}
+	rows.Close()
+	return user
 }
-*/
