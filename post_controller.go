@@ -43,10 +43,14 @@ func userCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func userIndex(w http.ResponseWriter, r *http.Request) {
-	temp := template.Must(template.ParseFiles("views/posts/index.html"))
-	err := temp.ExecuteTemplate(w, "index.html", nil)
+	posts := models.AllPosts(db)
+	for _, v := range posts {
+		fmt.Println(v)
+	}
+	temp := template.Must(template.ParseFiles("views/posts/index.tmpl"))
+	err := temp.Execute(w, posts)
 	if err != nil {
-		log.Fatal("[golang server] internal server error")
+		log.Fatal("テンプレートエラー", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	fmt.Println("インデックス")
