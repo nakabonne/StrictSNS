@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	defer db.Close()
 	http.HandleFunc("/", userIndex)
 	http.HandleFunc("/post/new", userNew)
 	http.HandleFunc("/post/create", userCreate)

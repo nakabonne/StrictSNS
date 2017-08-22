@@ -45,27 +45,17 @@ func userCreate(w http.ResponseWriter, r *http.Request) {
 
 func userIndex(w http.ResponseWriter, r *http.Request) {
 	posts := models.AllPosts(db)
-	for _, v := range posts {
-		fmt.Println(v)
-	}
 	temp := template.Must(template.ParseFiles("views/posts/index.tmpl"))
 	err := temp.Execute(w, posts)
 	if err != nil {
 		log.Fatal("テンプレートエラー", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	//posts := models.AllPosts(db)
-	//defer db.Close()
-	//defer posts.Close()
 }
 
 func userDetail(w http.ResponseWriter, r *http.Request) {
 	segs := strings.Split(r.URL.Path, "/")
-	fmt.Println("idは", segs[3])
 	id, _ := strconv.ParseUint(segs[3], 10, 64)
-	//for _, v := range segs {
-	//	fmt.Println(v)
-	//}
 	post := models.PostByID(db, id)
 	tmpl := template.Must(template.ParseFiles("views/posts/detail.tmpl"))
 	err := tmpl.Execute(w, post)

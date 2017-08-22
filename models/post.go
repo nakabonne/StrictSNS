@@ -46,9 +46,11 @@ func AllPosts(db *sql.DB) []*Post {
 		}
 		posts = append(posts, &Post{ID: id, UserID: userID, Content: content, CreatedAt: createdAt, UpdatedAt: updatedAt})
 	}
+	rows.Close()
 	return posts
 }
 
+// PostByID id指定で全件取得
 func PostByID(db *sql.DB, id uint64) *Post {
 	idS := strconv.FormatUint(id, 10)
 	query := "SELECT * FROM `posts` WHERE `id` = " + idS
@@ -72,5 +74,6 @@ func PostByID(db *sql.DB, id uint64) *Post {
 		}
 		post = &Post{ID: id, UserID: userID, Content: content, CreatedAt: createdAt, UpdatedAt: updatedAt}
 	}
+	rows.Close()
 	return post
 }
