@@ -28,6 +28,7 @@ func postCreate(w http.ResponseWriter, r *http.Request) {
 
 	content := strings.Join(r.Form["content"], "")
 	post := models.Post{
+		ID:      4,
 		UserID:  1,
 		Content: content,
 	}

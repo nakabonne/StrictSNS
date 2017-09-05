@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"strconv"
+	"time"
 )
 
 // Post 投稿
@@ -17,8 +18,8 @@ type Post struct {
 
 // Insert インサートする
 func (p *Post) Insert(db *sql.DB) {
-	query := "INSERT INTO posts (user_id, content) values(?, ?)"
-	if _, err := db.Exec(query, p.UserID, p.Content); err != nil {
+	query := "INSERT INTO posts (id, user_id, content, created_at, updated_at) values(?, ?, ?, ?, ?)"
+	if _, err := db.Exec(query, p.ID, p.UserID, p.Content, time.Now(), time.Now()); err != nil {
 		log.Fatal("インサートエラー：", err)
 	}
 }

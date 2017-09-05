@@ -6,7 +6,8 @@ import (
 )
 
 func GetMysql() *sql.DB {
-	db, err := sql.Open("mysql", "root:Tsuba2896@/go_samples")
+	// sqlUser,sqlPass,sqlNameは別ファイルにて管理(gitでは管理外)
+	db, err := sql.Open("mysql", sqlUser+":"+sqlPass+"@/"+sqlName)
 	if err != nil {
 		log.Fatal("エラー：", err)
 		// *sql.DB型の何かを返す
